@@ -1,0 +1,16 @@
+{
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "jest.autoRun": {
+        "watch": false,
+        "onSave": "test-file"
+    },
+    // Disable auto reveal of the test output in the terminal
+     "jest.autoRevealOutput": "off",
+    // this requires the following setting as well:
+    "testing.openTesting": "neverOpen",
+    // disable copilot
+    "github.copilot.editor.enableAutoCompletions": false,
+    "github.copilot.enable": {
+        "*": false
+    }
+}
