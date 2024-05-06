@@ -18,6 +18,7 @@ javascript:
     - npm ci
     # - npm run build # we use ts-jest, no need for compilation
     - npm test
+  coverage: '/All files\s*|\s+([\d\.]+)\s*\|.*/'
   artifacts:
     reports:
       junit:

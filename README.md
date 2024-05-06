@@ -1,4 +1,5 @@
 [![pipeline status](../../../badges/main/pipeline.svg)](../../../-/pipelines/latest)
+[![coverage](../../../badges/main/coverage.svg)](../../../-/pipelines/latest)
 
 # WE 2, Blatt 07
 
