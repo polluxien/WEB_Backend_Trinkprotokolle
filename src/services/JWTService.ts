@@ -1,7 +1,8 @@
+import cookieParser from "cookie-parser";
 import { LoginResource } from "../Resources";
 import { login } from "./AuthenticationService";
 import dotenv from "dotenv";
-import { JwtPayload, sign, verify } from "jsonwebtoken";
+import { JsonWebTokenError, JwtPayload, sign, verify } from "jsonwebtoken";
 
 dotenv.config();
 
@@ -10,7 +11,7 @@ export async function verifyPasswordAndCreateJWT(
   password: string
 ): Promise<string | undefined> {
   const jwtSecret = process.env.JWT_SECRET;
-  const jwtTtl = process.env.JWT_SECRET;
+  const jwtTtl = process.env.JWT_TTL;
   if (!jwtSecret || !jwtTtl)
     throw new Error("jwtSecret oder/und jwtTtl nicht gesetzt");
 
@@ -22,7 +23,7 @@ export async function verifyPasswordAndCreateJWT(
       exp: Math.floor(Date.now() / 1000) + Number(jwtTtl),
     };
     const jwtString = sign(payload, jwtSecret, {
-      algorithm: "HS256"
+      algorithm: "HS256",
     });
     return jwtString;
   }
@@ -30,5 +31,15 @@ export async function verifyPasswordAndCreateJWT(
 }
 
 export function verifyJWT(jwtString: string | undefined): LoginResource {
-  throw new Error("Function verifyJWT not implemented yet");
+  const jwtSecret = process.env.JWT_SECRET;
+  const jwtTtl = process.env.JWT_SECRET;
+  if (!jwtSecret || !jwtTtl)
+    throw new Error("jwtSecret oder/und jwtTtl nicht gesetzt");
+
+  try {
+    const payload = verify(jwtString!, jwtSecret) as JwtPayload;
+    return { id: payload.id, role: payload.role, exp: payload.exp! };
+  } catch (err) {
+    throw new JsonWebTokenError("Jason Web Token falsch");
+  }
 }

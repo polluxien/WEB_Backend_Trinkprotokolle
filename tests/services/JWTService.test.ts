@@ -25,3 +25,6 @@ test("verifyPasswordAndCreateJWT sollte nicht jwt empfangen", async () => {
   );
   expect(maJwt).not.toBeDefined();
 });
+
+
+//-----------------------------------------------------------------------

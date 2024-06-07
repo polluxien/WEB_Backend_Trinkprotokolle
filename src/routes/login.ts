@@ -13,7 +13,6 @@ loginRouter.post(
   "/",
   body("name").isString().isLength({ min: 3, max: 100 }),
   body("password").isString().isLength({ min: 3, max: 100 }),
-  requiresAuthentication,
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -43,7 +42,7 @@ loginRouter.post(
   }
 );
 
-loginRouter.get("/", optionalAuthentication, async (req, res, next) => {
+loginRouter.get("/", async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -71,7 +70,7 @@ loginRouter.get("/", optionalAuthentication, async (req, res, next) => {
   }
 });
 
-loginRouter.delete("/", optionalAuthentication, async (req, res, next) => {
+loginRouter.delete("/", async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -82,6 +81,7 @@ loginRouter.delete("/", optionalAuthentication, async (req, res, next) => {
         secure: true,
         sameSite: "none",
       });
+      return res.status(200).json({ message: "Cookie erfolgreich gelöscht!" });
   } catch (err) {
     next(err);
   }
