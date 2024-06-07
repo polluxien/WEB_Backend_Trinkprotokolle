@@ -4,9 +4,10 @@ dotenv.config();
 import "restmatcher";
 import supertest from "supertest";
 import { PflegerResource, ProtokollResource } from "../../src/Resources";
-import app from "../../src/app";
 import { createPfleger } from "../../src/services/PflegerService";
 import { createProtokoll } from "../../src/services/ProtokollService";
+import app from "../../src/app";
+
 
 let pomfrey: PflegerResource;
 let fredsProtokoll: ProtokollResource;
