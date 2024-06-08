@@ -5,6 +5,7 @@ import app from "../../src/app";
 import { createPfleger } from "../../src/services/PflegerService";
 import { createProtokoll } from "../../src/services/ProtokollService";
 import { createEintrag } from "../../src/services/EintragService";
+import { performAuthentication, supertestWithAuth } from "../supertestWithAuth";
 
 let idBehrens: string;
 let idProtokoll: string;
@@ -13,7 +14,7 @@ beforeEach(async () => {
   // create a pfleger
   const behrens = await createPfleger({
     name: "Hofrat Behrens",
-    password: "geheim",
+    password: "HDztdtz7/78d",
     admin: false,
   });
   idBehrens = behrens.id!;
@@ -24,6 +25,8 @@ beforeEach(async () => {
     public: true,
   });
   idProtokoll = protokoll.id!;
+
+  await performAuthentication("Hofrat Behrens", "HDztdtz7/78d");
 });
 
 test("/api/protokoll/:id/eintrage get, 5 Einträge", async () => {
@@ -63,7 +66,7 @@ test("GET /api/protokoll/:id - get specific protocol", async () => {
 });
 
 test("POST /api/protokoll - neues protocol", async () => {
-  const testee = supertest(app);
+  const testee = supertestWithAuth(app);
   const newProtokoll = {
     patient: "J. Ziemssen",
     datum: "02.12.1912",
@@ -79,31 +82,13 @@ test("POST /api/protokoll - neues protocol", async () => {
   expect(response.body).toHaveProperty("patient", "J. Ziemssen");
 });
 
-/*
-test("PUT /api/protokoll/:id - update protocol", async () => {
-  const testee = supertest(app);
-  const updatedProtokoll = {
-    patient: "J. Ziemssen",
-    datum: "03.12.1912",
-    ersteller: idBehrens,
-    public: false,
-    closed: true,
-  };
-  const response = await testee
-    .put(`/api/protokoll/${idProtokoll}`)
-    .send(updatedProtokoll);
-  expect(response.statusCode).toBe(200);
-  expect(response.body).toHaveProperty("id", idProtokoll);
-  expect(response.body).toHaveProperty("patient", "J. Ziemssen");
-});
-*/
-
 test("DELETE /api/protokoll/:id - delete protocol", async () => {
-  const testee = supertest(app);
-  const response = await testee.delete(`/api/protokoll/${idProtokoll}`);
+  const response = await supertestWithAuth(app)
+    .delete(`/api/protokoll/${idProtokoll}`);
   expect(response.statusCode).toBe(204);
 
-  const getResponse = await testee.get(`/api/protokoll/${idProtokoll}`);
+  const getResponse = await supertestWithAuth(app)
+    .get(`/api/protokoll/${idProtokoll}`);
   expect(getResponse.statusCode).toBe(404);
 });
 

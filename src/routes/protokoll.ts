@@ -8,6 +8,10 @@ import {
 } from "../services/ProtokollService";
 import { getAlleEintraege } from "../services/EintragService";
 import { body, param, validationResult } from "express-validator";
+import {
+  optionalAuthentication,
+  requiresAuthentication,
+} from "./authentication";
 
 export const protokollRouter = express.Router();
 
@@ -15,6 +19,7 @@ export const protokollRouter = express.Router();
 protokollRouter.get(
   "/:id/eintraege",
   param("id").isMongoId(),
+  optionalAuthentication,
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -32,7 +37,7 @@ protokollRouter.get(
 );
 
 // Alle Protokolle abrufen
-protokollRouter.get("/alle", async (req, res, next) => {
+protokollRouter.get("/alle", optionalAuthentication, async (req, res, next) => {
   //const pflegerId = .... blatt 7
   try {
     const protokolle = await getAlleProtokolle(); // hier noch mal prüfen
@@ -43,20 +48,25 @@ protokollRouter.get("/alle", async (req, res, next) => {
 });
 
 // Bestimmtes Protokoll abrufen
-protokollRouter.get("/:id", param("id").isMongoId(), async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+protokollRouter.get(
+  "/:id",
+  param("id").isMongoId(),
+  optionalAuthentication,
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const id = req.params!.id;
+    try {
+      const protokoll = await getProtokoll(id);
+      res.send(protokoll); // 200 by default
+    } catch (err) {
+      res.status(404).send(); // not found
+      next(err);
+    }
   }
-  const id = req.params!.id;
-  try {
-    const protokoll = await getProtokoll(id);
-    res.send(protokoll); // 200 by default
-  } catch (err) {
-    res.status(404).send(); // not found
-    next(err);
-  }
-});
+);
 
 // Neues Protokoll erstellen
 protokollRouter.post(
@@ -66,6 +76,7 @@ protokollRouter.post(
   body("public").optional().isBoolean(),
   body("closed").optional().isBoolean(),
   body("ersteller").isMongoId(),
+  requiresAuthentication,
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -90,6 +101,7 @@ protokollRouter.put(
   body("public").optional().isBoolean(),
   body("closed").optional().isBoolean(),
   body("id").isMongoId(),
+  requiresAuthentication,
   async (req, res, next) => {
     const errors = validationResult(req).array();
     if (req.params!.id !== req.body.id) {
@@ -129,6 +141,7 @@ protokollRouter.put(
 protokollRouter.delete(
   "/:id",
   param("id").isMongoId(),
+  requiresAuthentication,
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
