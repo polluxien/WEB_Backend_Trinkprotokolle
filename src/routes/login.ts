@@ -42,7 +42,7 @@ loginRouter.post(
   }
 );
 
-loginRouter.get("/", async (req, res, next) => {
+loginRouter.get("/", optionalAuthentication, async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -70,18 +70,18 @@ loginRouter.get("/", async (req, res, next) => {
   }
 });
 
-loginRouter.delete("/", async (req, res, next) => {
+loginRouter.delete("/", requiresAuthentication, async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
   try {
     res.clearCookie("access_token", {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-      });
-      return res.status(200).json({ message: "Cookie erfolgreich gelöscht!" });
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
+    return res.status(200).json({ message: "Cookie erfolgreich gelöscht!" });
   } catch (err) {
     next(err);
   }

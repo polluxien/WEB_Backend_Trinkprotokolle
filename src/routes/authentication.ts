@@ -2,6 +2,7 @@ import { verify } from "crypto";
 import { NextFunction, Request, Response } from "express";
 import { verifyJWT } from "../services/JWTService";
 import { LoginResource } from "../Resources";
+import { JwtPayload } from "jsonwebtoken";
 
 declare global {
   namespace Express {
@@ -26,19 +27,24 @@ export function requiresAuthentication(
   req.pflegerId = undefined;
   try {
     const auth = req.header("Authorization");
-    if (!auth) {
+    const cookie = req.cookies.access_token;
+    
+    console.log("Authorization Header:", auth);
+    console.log("Access Token Cookie:", cookie);
+    
+    if (!auth && !cookie) {
       return res.status(401).json({ error: "Unauthorized" }); // Kein oder falscher Authorization-Header
     }
-    const jwtString = auth!.substring("Bearer ".length);
+    let jwtString = auth? auth!.substring("Bearer ".length) : cookie;
     const resource: LoginResource | undefined = verifyJWT(jwtString);
     if (!resource) {
       return res.status(401).json({ error: "Unauthorized" }); // Kein oder falscher Authorization-Header
     }
+    req.role = resource.role;
     req.pflegerId = resource.id;
     next();
   } catch (err) {
     res.status(401); // Unauthorized
-    // ggf. weitere Header setzen, je nach Protokoll
     next(err);
   }
 }
@@ -56,6 +62,7 @@ export function optionalAuthentication(
       const resource: LoginResource | undefined = verifyJWT(jwtString);
       if (resource) {
         req.pflegerId = resource.id;
+        req.role = resource.role;
       } else {
         return res.status(401).json({ error: "Unauthorized" }); // Kein oder falscher Authorization-Header
       }
@@ -63,7 +70,6 @@ export function optionalAuthentication(
     next();
   } catch (err) {
     res.status(401); // Unauthorized
-    // ggf. weitere Header setzen, je nach Protokoll
     next(err);
   }
 }

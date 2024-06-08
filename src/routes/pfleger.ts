@@ -7,11 +7,12 @@ import {
   updatePfleger,
 } from "../services/PflegerService";
 import { body, param, validationResult } from "express-validator";
+import { optionalAuthentication, requiresAuthentication } from "./authentication";
 
 export const pflegerRouter = express.Router();
 
 // Get all Pfleger
-pflegerRouter.get("/alle", async (req, res, next) => {
+pflegerRouter.get("/alle", optionalAuthentication, async (req, res, next) => {
   try {
     const pflegerList = await getAllePfleger();
     res.status(200).send(pflegerList);
@@ -26,6 +27,7 @@ pflegerRouter.post(
   body("password").isStrongPassword().isLength({ min: 3, max: 100 }),
   body("name").isString().isLength({ min: 3, max: 100 }),
   body("admin").optional().isBoolean(),
+  requiresAuthentication,
   async (req, res, next) => {
     //Typabfrage
     const pflegerResource = req.body;
@@ -50,6 +52,7 @@ pflegerRouter.put(
   param("id").isMongoId().isLength({ min: 3, max: 100 }),
   body("name").isString().isLength({ min: 3, max: 100 }),
   body("admin").optional().isBoolean(),
+  requiresAuthentication,
   async (req, res, next) => {
     const errors = validationResult(req).array();
     if (req.params!.id !== req.body.id)
@@ -88,6 +91,7 @@ pflegerRouter.put(
 pflegerRouter.delete(
   "/:id",
   param("id").isMongoId().isLength({ min: 3, max: 100 }),
+  requiresAuthentication,
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

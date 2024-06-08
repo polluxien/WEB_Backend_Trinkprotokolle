@@ -7,14 +7,12 @@ import { pflegerRouter } from './routes/pfleger';
 import { protokollRouter } from './routes/protokoll';
 import cookieParser from 'cookie-parser';
 
+
 const app = express();
 
 // Middleware:
 app.use('*', express.json()) // vgl. Folie 138
 app.use(cookieParser());
-
-// Routes
-app.use("/api/login", loginRouter)   // wird erst später implementiert, hier nur Dummy; hat aber bereits einen Präfix
 
 // die weiteren Router:
 app.use("/api/protokoll", protokollRouter);

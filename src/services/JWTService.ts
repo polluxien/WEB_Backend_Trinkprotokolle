@@ -32,13 +32,12 @@ export async function verifyPasswordAndCreateJWT(
 
 export function verifyJWT(jwtString: string | undefined): LoginResource {
   const jwtSecret = process.env.JWT_SECRET;
-  const jwtTtl = process.env.JWT_SECRET;
-  if (!jwtSecret || !jwtTtl)
+  if (!jwtSecret)
     throw new Error("jwtSecret oder/und jwtTtl nicht gesetzt");
 
   try {
     const payload = verify(jwtString!, jwtSecret) as JwtPayload;
-    return { id: payload.id, role: payload.role, exp: payload.exp! };
+    return { id: payload.sub as string, role: payload.role, exp: payload.exp! };
   } catch (err) {
     throw new JsonWebTokenError("Jason Web Token falsch");
   }
