@@ -29,8 +29,8 @@ export function requiresAuthentication(
     const auth = req.header("Authorization");
     const cookie = req.cookies.access_token;
     
-    console.log("Authorization Header:", auth);
-    console.log("Access Token Cookie:", cookie);
+   // console.log("Authorization Header:", auth);
+   // console.log("Access Token Cookie:", cookie);
     
     if (!auth && !cookie) {
       return res.status(401).json({ error: "Unauthorized" }); // Kein oder falscher Authorization-Header

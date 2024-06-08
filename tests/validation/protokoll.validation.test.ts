@@ -7,6 +7,7 @@ import { PflegerResource, ProtokollResource } from "../../src/Resources";
 import { createPfleger } from "../../src/services/PflegerService";
 import { createProtokoll } from "../../src/services/ProtokollService";
 import app from "../../src/app";
+import { performAuthentication, supertestWithAuth } from "../supertestWithAuth";
 
 
 let pomfrey: PflegerResource;
@@ -25,10 +26,11 @@ beforeEach(async () => {
     closed: false,
     ersteller: pomfrey.id!,
   });
+  await performAuthentication("Poppy Pomfrey", "12345bcdABCD..;,.");
 });
 
 test("/api/protokoll GET, ungültige ID", async () => {
-  const testee = supertest(app);
+  const testee = supertestWithAuth(app);
   const response = await testee.get(`/api/protokoll/1234`);
 
   expect(response).toHaveValidationErrorsExactly({
@@ -38,7 +40,7 @@ test("/api/protokoll GET, ungültige ID", async () => {
 });
 
 test("/api/protokoll PUT, verschiedene ID (params und body)", async () => {
-  const testee = supertest(app);
+  const testee = supertestWithAuth(app);
   const invalidProtokollID = pomfrey.id!;
   const update: ProtokollResource = {
     ...fredsProtokoll,
@@ -57,7 +59,7 @@ test("/api/protokoll PUT, verschiedene ID (params und body)", async () => {
 });
 
 test("/api/protokoll POST, fehlende Felder", async () => {
-  const testee = supertest(app);
+  const testee = supertestWithAuth(app);
   const invalidProtokoll = {
     datum: "01.10.2023",
     public: true,
@@ -73,7 +75,7 @@ test("/api/protokoll POST, fehlende Felder", async () => {
 });
 
 test("/api/protokoll POST, ungültige Datentypen", async () => {
-  const testee = supertest(app);
+  const testee = supertestWithAuth(app);
   const invalidProtokoll = {
     patient: 123,
     datum: "01.10.2023",
@@ -87,7 +89,7 @@ test("/api/protokoll POST, ungültige Datentypen", async () => {
 });
 
 test("/api/protokoll PUT, ungültige Länge des Patientenfeldes", async () => {
-  const testee = supertest(app);
+  const testee = supertestWithAuth(app);
   const update: ProtokollResource = {
     ...fredsProtokoll,
     patient: "a".repeat(101), // ungültige Länge
@@ -103,7 +105,7 @@ test("/api/protokoll PUT, ungültige Länge des Patientenfeldes", async () => {
 });
 
 test("/api/protokoll DELETE, ungültige ID", async () => {
-  const testee = supertest(app);
+  const testee = supertestWithAuth(app);
   const response = await testee.delete(`/api/protokoll/1234`);
 
   expect(response).toHaveValidationErrorsExactly({
@@ -113,7 +115,7 @@ test("/api/protokoll DELETE, ungültige ID", async () => {
 });
 
 test("/api/protokoll GET /:id/eintraege, ungültige ID", async () => {
-  const testee = supertest(app);
+  const testee = supertestWithAuth(app);
   const response = await testee.get(`/api/protokoll/1234/eintraege`);
 
   expect(response).toHaveValidationErrorsExactly({
@@ -123,7 +125,7 @@ test("/api/protokoll GET /:id/eintraege, ungültige ID", async () => {
 });
 
 test("/api/protokoll POST, gültiges Protokoll", async () => {
-  const testee = supertest(app);
+  const testee = supertestWithAuth(app);
   const validProtokoll = {
     patient: "Harry Potter",
     datum: "01.11.2023",
@@ -138,7 +140,7 @@ test("/api/protokoll POST, gültiges Protokoll", async () => {
 });
 
 test("/api/protokoll PUT, gültiges Protokoll", async () => {
-  const testee = supertest(app);
+  const testee = supertestWithAuth(app);
   const update: ProtokollResource = {
     ...fredsProtokoll,
     patient: "George Weasly",
