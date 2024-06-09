@@ -20,6 +20,16 @@ export async function getAllePfleger(): Promise<PflegerResource[]> {
   return pflegerResources;
 }
 
+export async function getPfleger(pflegerid: string): Promise<PflegerResource> {
+  const pfleger = await Pfleger.findById(pflegerid).exec();
+  const pflegerResources: PflegerResource = {
+      name: pfleger!.name,
+      admin: !!pfleger!.admin,
+      id: pfleger!.id,
+    };
+    return pflegerResources;
+}
+
 /**
  * Erzeugt einen Pfleger. Das Password darf nicht zurückgegeben werden.
  */

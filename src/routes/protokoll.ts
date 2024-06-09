@@ -27,8 +27,13 @@ protokollRouter.get(
     }
     const id = req.params!.id;
     try {
-      const eintraege = await getAlleEintraege(id);
-      res.send(eintraege); // 200 by default
+      const protokoll = await getProtokoll(id);
+      if (protokoll.public || req.pflegerId === protokoll.ersteller) {
+        const eintraege = await getAlleEintraege(id);
+        res.send(eintraege); // 200 by default
+      } else {
+        res.status(403).send(); // Forbidden
+      }
     } catch (err) {
       res.status(404).send(); // not found
       next(err);
@@ -38,9 +43,14 @@ protokollRouter.get(
 
 // Alle Protokolle abrufen
 protokollRouter.get("/alle", optionalAuthentication, async (req, res, next) => {
-  //const pflegerId = .... blatt 7
   try {
-    const protokolle = await getAlleProtokolle(); // hier noch mal prüfen
+    const pflegerId = req.params.id;
+    let protokolle = null;
+    if (!pflegerId) {
+      protokolle = await getAlleProtokolle(); // hier noch mal prüfen
+    } else {
+      protokolle = await getAlleProtokolle(pflegerId);
+    }
     res.send(protokolle); // 200 by default
   } catch (err) {
     next(err);
@@ -60,7 +70,11 @@ protokollRouter.get(
     const id = req.params!.id;
     try {
       const protokoll = await getProtokoll(id);
-      res.send(protokoll); // 200 by default
+      if (protokoll.public || req.pflegerId === protokoll.ersteller) {
+        res.send(protokoll); // 200 by default
+      } else {
+        res.status(403).send(); 
+      }
     } catch (err) {
       res.status(404).send(); // not found
       next(err);
@@ -129,6 +143,10 @@ protokollRouter.put(
     const protokollResource = req.body;
     protokollResource.id = id;
     try {
+      const protokoll = await getProtokoll(id);
+      if (req.pflegerId !== protokoll.ersteller) {
+        return res.status(403).send(); 
+      }
       const updatedProtokoll = await updateProtokoll(protokollResource);
       res.send(updatedProtokoll); // 200 by default
     } catch (err) {
@@ -149,6 +167,10 @@ protokollRouter.delete(
     }
     const id = req.params!.id;
     try {
+      const protokoll = await getProtokoll(id);
+      if (req.pflegerId !== protokoll.ersteller) {
+        return res.status(403).send(); 
+      }
       await deleteProtokoll(id);
       res.status(204).send(); // 204 No Content
     } catch (err) {

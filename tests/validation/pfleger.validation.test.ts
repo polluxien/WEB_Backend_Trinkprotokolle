@@ -15,6 +15,8 @@ beforeEach(async () => {
   pomfrey = await createPfleger({
     name: "Poppy Pomfrey", password: "12345bcdABCD..;,.", admin: false,
   });
+
+  await performAuthentication("Poppy Pomfrey", "12345bcdABCD..;,.");
 });
 
 test("/api/pfleger GET /alle", async () => {
@@ -47,6 +49,7 @@ test("/api/pfleger POST, ungültiges Passwort", async () => {
 });
 
 test("/api/pfleger PUT, verschiedene ID (params und body)", async () => {
+  await performAuthentication("Poppy Pomfrey", "12345bcdABCD..;,.");
   const testee = supertestWithAuth(app);
   
   // Erstelle ein neues PflegerResource Objekt mit einer anderen ID

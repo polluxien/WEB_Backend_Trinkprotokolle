@@ -11,6 +11,7 @@ import {
   optionalAuthentication,
   requiresAuthentication,
 } from "./authentication";
+import { getProtokoll } from "../services/ProtokollService";
 
 export const eintragRouter = express.Router();
 
@@ -27,7 +28,17 @@ eintragRouter.get(
     const id = req.params!.id;
     try {
       const eintrag = await getEintrag(id);
-      res.send(eintrag); // 200 by default
+      const protokoll = await getProtokoll(eintrag.protokoll);
+
+      if (
+        protokoll.public ||
+        req.pflegerId === protokoll.ersteller ||
+        req.pflegerId === eintrag.ersteller
+      ) {
+        res.send(eintrag); // 200 by default
+      } else {
+        res.status(403).send();
+      }
     } catch (err) {
       res.status(404).send(); // not found
       next(err);

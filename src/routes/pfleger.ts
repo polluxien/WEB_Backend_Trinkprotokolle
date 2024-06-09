@@ -4,10 +4,15 @@ import {
   createPfleger,
   deletePfleger,
   getAllePfleger,
+  getPfleger,
   updatePfleger,
 } from "../services/PflegerService";
 import { body, param, validationResult } from "express-validator";
-import { optionalAuthentication, requiresAuthentication } from "./authentication";
+import {
+  optionalAuthentication,
+  requiresAuthentication,
+} from "./authentication";
+import { Pfleger } from "../model/PflegerModel";
 
 export const pflegerRouter = express.Router();
 
@@ -79,8 +84,13 @@ pflegerRouter.put(
     const pflegerResource = req.body;
     pflegerResource.id = id;
     try {
-      const updatedPfleger = await updatePfleger(pflegerResource);
-      res.status(200).send(updatedPfleger);
+      const pfleger = await getPfleger(id);
+      if (pfleger.admin) {
+        const updatedPfleger = await updatePfleger(pflegerResource);
+        res.status(200).send(updatedPfleger);
+      } else {
+        res.status(403).send();
+      }
     } catch (err) {
       next(err); // Fehler an die Fehler-Middleware weiterleiten
     }
@@ -103,8 +113,18 @@ pflegerRouter.delete(
     }
 
     try {
-      await deletePfleger(id);
-      res.status(204).send(); // 204 No Content
+      const pfleger = await getPfleger(id);
+      if (id == req.body.id) {
+        return res.status(403).send({
+          message: "Ein Administrator kann sich nicht selbst löschen",
+        });
+      }
+      if (pfleger.admin) {
+        await deletePfleger(id);
+        res.status(204).send(); // 204 No Content
+      } else {
+        res.status(403).send();
+      }
     } catch (err) {
       next(err);
     }

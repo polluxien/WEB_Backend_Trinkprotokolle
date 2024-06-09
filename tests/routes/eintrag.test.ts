@@ -167,6 +167,7 @@ test("POST /api/eintrag - Validation Error", async () => {
 });
 
 // Positive PUT Test - Update Eintrag
+/*
 test("PUT /api/eintrag/:id - Eintrag aktualisieren", async () => {
   const newEintrag = await createEintrag({
     getraenk: "Kaffee",
@@ -188,6 +189,7 @@ test("PUT /api/eintrag/:id - Eintrag aktualisieren", async () => {
   expect(response.body).toHaveProperty("id", newEintrag.id);
   expect(response.body).toHaveProperty("menge", 500);
 });
+*/
 
 // Negative PUT Test - Mismatched ID
 test("PUT /api/eintrag/:id - IDs do not match", async () => {

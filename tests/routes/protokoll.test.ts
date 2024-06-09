@@ -56,7 +56,7 @@ test("/api/protokoll/:id/eintrage get, keine Einträge", async () => {
 test("/api/protokoll/:id/eintrage get, falsche Protokoll-ID", async () => {
   const testee = supertest(app);
   const response = await testee.get(`/api/protokoll/${idBehrens}/eintraege`);
-  expect(response.statusCode).toBe(200);
+  expect(response.statusCode).toBe(404);
 });
 
 test("GET /api/protokoll/:id - get specific protocol", async () => {

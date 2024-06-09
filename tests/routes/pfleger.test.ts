@@ -20,7 +20,7 @@ beforeEach(async () => {
   const behrens = await createPfleger({
     name: "Hofrat Behrens",
     password: "Testpass?23",
-    admin: false,
+    admin: true,
   });
   idBehrens = behrens.id!;
   // Protokoll erstellen
@@ -31,6 +31,8 @@ beforeEach(async () => {
     public: true,
   });
   idProtokoll = protokoll.id!;
+
+  await performAuthentication("Hofrat Behrens", "HTestpass?23");
 });
 
 test("GET /api/pfleger/alle - Alle Pfleger abrufen", async () => {
