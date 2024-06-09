@@ -7,24 +7,33 @@ import {
   updateEintrag,
 } from "../services/EintragService";
 import { param, body, validationResult } from "express-validator";
+import {
+  optionalAuthentication,
+  requiresAuthentication,
+} from "./authentication";
 
 export const eintragRouter = express.Router();
 
 // Eintrag abrufen
-eintragRouter.get("/:id", param("id").isMongoId(), async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+eintragRouter.get(
+  "/:id",
+  param("id").isMongoId(),
+  optionalAuthentication,
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const id = req.params!.id;
+    try {
+      const eintrag = await getEintrag(id);
+      res.send(eintrag); // 200 by default
+    } catch (err) {
+      res.status(404).send(); // not found
+      next(err);
+    }
   }
-  const id = req.params!.id;
-  try {
-    const eintrag = await getEintrag(id);
-    res.send(eintrag); // 200 by default
-  } catch (err) {
-    res.status(404).send(); // not found
-    next(err);
-  }
-});
+);
 
 // Neuen Eintrag erstellen
 eintragRouter.post(
@@ -34,6 +43,7 @@ eintragRouter.post(
   body("kommentar").optional().isString().isLength({ min: 1, max: 1000 }),
   body("ersteller").isMongoId(),
   body("protokoll").isMongoId(),
+  requiresAuthentication,
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -60,6 +70,7 @@ eintragRouter.put(
   body("kommentar").optional().isString().isLength({ min: 1, max: 1000 }),
   body("ersteller").isMongoId(),
   body("protokoll").isMongoId(),
+  requiresAuthentication,
   async (req, res, next) => {
     const errors = validationResult(req).array();
     if (req.params!.id !== req.body.id) {
@@ -100,6 +111,7 @@ eintragRouter.put(
 eintragRouter.delete(
   "/:id",
   param("id").isMongoId(),
+  requiresAuthentication,
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -119,6 +131,7 @@ eintragRouter.delete(
 eintragRouter.get(
   "/protokoll/:id",
   param("id").isMongoId(),
+  optionalAuthentication,
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

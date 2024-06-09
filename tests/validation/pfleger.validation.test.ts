@@ -15,7 +15,6 @@ beforeEach(async () => {
   pomfrey = await createPfleger({
     name: "Poppy Pomfrey", password: "12345bcdABCD..;,.", admin: false,
   });
-  performAuthentication("Poppy Pomfrey","12345bcdABCD..;,.")
 });
 
 test("/api/pfleger GET /alle", async () => {
