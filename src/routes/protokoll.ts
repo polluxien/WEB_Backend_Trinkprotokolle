@@ -44,10 +44,10 @@ protokollRouter.get(
 // Alle Protokolle abrufen
 protokollRouter.get("/alle", optionalAuthentication, async (req, res, next) => {
   try {
-    const pflegerId = req.params.id;
+    const pflegerId = req.pflegerId;
     let protokolle = null;
     if (!pflegerId) {
-      protokolle = await getAlleProtokolle(); // hier noch mal prüfen
+      protokolle = await getAlleProtokolle(); 
     } else {
       protokolle = await getAlleProtokolle(pflegerId);
     }

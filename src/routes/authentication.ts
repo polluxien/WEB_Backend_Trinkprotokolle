@@ -26,17 +26,15 @@ export function requiresAuthentication(
 ) {
   req.pflegerId = undefined;
   try {
-    const auth = req.header("Authorization");
     const cookie = req.cookies.access_token;
-    
-   // console.log("Authorization Header:", auth);
-   // console.log("Access Token Cookie:", cookie);
-    
-    if (!auth && !cookie) {
+
+    // console.log("Authorization Header:", auth);
+    // console.log("Access Token Cookie:", cookie);
+
+    if (!cookie) {
       return res.status(401).json({ error: "Unauthorized" }); // Kein oder falscher Authorization-Header
     }
-    let jwtString = auth? auth!.substring("Bearer ".length) : cookie;
-    const resource: LoginResource | undefined = verifyJWT(jwtString);
+    let resource = verifyJWT(cookie);
     if (!resource) {
       return res.status(401).json({ error: "Unauthorized" }); // Kein oder falscher Authorization-Header
     }
@@ -56,20 +54,16 @@ export function optionalAuthentication(
 ) {
   req.pflegerId = undefined;
   try {
-    const auth = req.header("Authorization");
-    if (auth) {
-      const jwtString = auth.substring("Bearer ".length);
-      const resource: LoginResource | undefined = verifyJWT(jwtString);
-      if (resource) {
-        req.pflegerId = resource.id;
-        req.role = resource.role;
-      } else {
-        return res.status(401).json({ error: "Unauthorized" }); // Kein oder falscher Authorization-Header
-      }
+    const cookie = req.cookies.access_token;
+    const loginResource = verifyJWT(cookie);
+    if (loginResource) {
+      req.pflegerId = loginResource.id;
+      req.role = loginResource.role;
+    } else {
+      return res.status(401).json({ error: "Unauthorized" }); // Kein oder falscher Authorization-Header
     }
     next();
   } catch (err) {
-    res.status(401); // Unauthorized
-    next(err);
+    next();
   }
 }

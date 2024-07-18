@@ -36,8 +36,9 @@ export async function getPfleger(pflegerid: string): Promise<PflegerResource> {
 export async function createPfleger(
   pflegerResource: PflegerResource
 ): Promise<PflegerResource> {
-  const isNameTaken = await Pfleger.find({ name: pflegerResource.name });
-  if (isNameTaken.length > 0) throw new Error("Name Exestiert bereits in Database");
+  const existingPfleger = await Pfleger.findOne({ name: pflegerResource.name });
+  if (existingPfleger) throw new Error("Name Exestiert bereits in Database");
+  
   const pfleger = await Pfleger.create(pflegerResource);
   const pflegerBack: PflegerResource = {
     name: pfleger.name,

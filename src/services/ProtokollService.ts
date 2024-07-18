@@ -29,14 +29,14 @@ export async function getAlleProtokolle(
     }
   }
 
-  const ersteller = pflegerId ? await Pfleger.findById(pflegerId).exec() : null;
   const protokollResources: ProtokollResource[] = [];
   for (let proto of uniqueProtokolle.values()) {
     const menge = await gesammtMenge(proto.id);
+    const ersteller = await Pfleger.findById(proto.ersteller).exec();
     const protoPush = {
       ersteller: proto.ersteller.toString(),
       erstellerName: ersteller ? ersteller.name : undefined,
-      gesammtMenge: menge,
+      gesamtMenge: menge,
       patient: proto.patient,
       datum: dateToString(proto.datum),
       public: proto.public,
@@ -63,7 +63,7 @@ export async function getProtokoll(id: string): Promise<ProtokollResource> {
       erstellerName: ersteller?.name,
       patient: proto.patient,
       datum: dateToString(proto.datum),
-      gesamtMenge: menge ? menge : 0,
+      gesamtMenge: menge,
       public: proto.public,
       closed: proto.closed,
       updatedAt: dateToString(proto.updatedAt!),

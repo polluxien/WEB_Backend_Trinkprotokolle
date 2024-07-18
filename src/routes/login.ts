@@ -34,7 +34,7 @@ loginRouter.post(
         secure: true,
         sameSite: "none",
       });
-      return res.json({ token: jwttokenString, user: loginResourceBack });
+      return res.json(loginResourceBack );
     } catch (err) {
       res.status(401); // Unauthorized
       next(err);
@@ -70,7 +70,7 @@ loginRouter.get("/", optionalAuthentication, async (req, res, next) => {
   }
 });
 
-loginRouter.delete("/", requiresAuthentication, async (req, res, next) => {
+loginRouter.delete("/", async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });

@@ -12,7 +12,6 @@ import {
   optionalAuthentication,
   requiresAuthentication,
 } from "./authentication";
-import { Pfleger } from "../model/PflegerModel";
 
 export const pflegerRouter = express.Router();
 
