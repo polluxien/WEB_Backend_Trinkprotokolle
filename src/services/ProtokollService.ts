@@ -13,9 +13,9 @@ export async function getAlleProtokolle(
   pflegerId?: string
 ): Promise<ProtokollResource[]> {
   let protoPfleger: any[] = [];
-  if (pflegerId)
+  if (pflegerId) {
     protoPfleger = await Protokoll.find({ ersteller: pflegerId }).exec();
-
+  }
   const publicListe = await Protokoll.find({ public: true }).exec();
 
   const uniqueProtokolle = new Map();

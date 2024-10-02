@@ -16,5 +16,6 @@
     "github.copilot.editor.enableAutoCompletions": false,
     "github.copilot.enable": {
         "*": false
-    }
+    },
+    "github-enterprise.uri": "https://gitlab.bht-berlin.de"
   }
