@@ -6,6 +6,8 @@ import { createPfleger } from "../../src/services/PflegerService";
 import { createProtokoll } from "../../src/services/ProtokollService";
 import { createEintrag } from "../../src/services/EintragService";
 import { performAuthentication, supertestWithAuth } from "../supertestWithAuth";
+import { Gender } from "../../src/model/PflegerModel";
+
 
 let idBehrens: string;
 let idProtokoll: string;
@@ -16,6 +18,10 @@ beforeEach(async () => {
     name: "Hofrat Behrens",
     password: "HDztdtz7/78d",
     admin: false,
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   });
   idBehrens = behrens.id!;
   const protokoll = await createProtokoll({

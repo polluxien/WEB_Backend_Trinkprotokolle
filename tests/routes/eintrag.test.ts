@@ -7,6 +7,8 @@ import supertest from "supertest";
 import app from "../../src/app";
 import { createEintrag } from "../../src/services/EintragService";
 import { performAuthentication, supertestWithAuth } from "../supertestWithAuth";
+import { Gender } from "../../src/model/PflegerModel";
+
 
 let idBehrens: string;
 let idProtokoll: string;
@@ -17,6 +19,10 @@ beforeEach(async () => {
     name: "Hofrat Behrens",
     password: "yswexrdtcfzguhiFD5$&/",
     admin: false,
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   });
   idBehrens = behrens.id!;
 

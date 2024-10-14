@@ -8,6 +8,8 @@ import {
 import { IPfleger, Pfleger } from "../../src/model/PflegerModel";
 import { IProtokoll, Protokoll } from "../../src/model/ProtokollModel";
 import { PflegerResource } from "../../src/Resources";
+import { Gender } from "../../src/model/PflegerModel";
+
 
 let pflegerHarry: HydratedDocument<IPfleger>;
 let pflegerSimon: HydratedDocument<IPfleger>;
@@ -20,15 +22,27 @@ beforeEach(async () => {
     name: "Harry",
     password: "password",
     admin: false,
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   });
   pflegerSimon = await Pfleger.create({
     name: "Simon",
     password: "123456789",
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   });
   pflegerGusti = await Pfleger.create({
     name: "Gusti",
     password: "miau",
     admin: false,
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   });
   await pflegerHarry.save();
   await pflegerSimon.save();
@@ -73,6 +87,10 @@ test("createPfleger test", async () => {
     name: "derNeue",
     password: "1234356789",
     admin: true,
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   });
   //t1 Richtige initalisiert
   expect(pfleger.name).toBe("derNeue");
@@ -95,6 +113,10 @@ test("updatePfleger test", async () => {
     name: "Willi",
     admin: true,
     id: id,
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   };
   const pflegerBack = await updatePfleger(pflegerUpp);
 
@@ -139,7 +161,11 @@ test("updatePfleger test - only name", async () => {
   const pflegerUpp: PflegerResource = {
     name: "Willi",
     id: id,
-    admin: false
+    admin: false,
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   };
   const pflegerBack = await updatePfleger(pflegerUpp);
 
@@ -161,6 +187,10 @@ test("updatePfleger test - name and admin", async () => {
     name: "Willi",
     admin: true,
     id: id,
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   };
   const pflegerBack = await updatePfleger(pflegerUpp);
 
@@ -179,5 +209,9 @@ test("Pflegername existiert bereits", async () => {
     name: "Harry",
     password: "1234356789",
     admin: true,
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   })).rejects.toThrow();
 });

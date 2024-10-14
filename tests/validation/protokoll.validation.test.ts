@@ -8,6 +8,8 @@ import { createPfleger } from "../../src/services/PflegerService";
 import { createProtokoll } from "../../src/services/ProtokollService";
 import app from "../../src/app";
 import { performAuthentication, supertestWithAuth } from "../supertestWithAuth";
+import { Gender } from "../../src/model/PflegerModel";
+
 
 
 let pomfrey: PflegerResource;
@@ -18,6 +20,10 @@ beforeEach(async () => {
     name: "Poppy Pomfrey",
     password: "12345bcdABCD..;,.",
     admin: false,
+    gender: Gender.Weiblich,
+    adress: "Fuchsbau 14, 10101 Landon",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   });
   fredsProtokoll = await createProtokoll({
     patient: "Fred Weasly",

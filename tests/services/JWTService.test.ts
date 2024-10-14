@@ -1,5 +1,7 @@
 import { verifyPasswordAndCreateJWT } from "../../src/services/JWTService";
 import { createPfleger } from "../../src/services/PflegerService";
+import { Gender } from "../../src/model/PflegerModel";
+
 
 
 beforeEach(async () => {
@@ -7,6 +9,10 @@ beforeEach(async () => {
     name: "Hofrat Behrens",
     password: "12345bcdABCD..;,.",
     admin: false,
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   });
 });
 

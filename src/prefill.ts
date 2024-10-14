@@ -1,6 +1,6 @@
 // istanbul ignore file
 
-import { PflegerResource, ProtokollResource } from "./Resources";
+import { Gender, PflegerResource, ProtokollResource } from "./Resources";
 import { logger } from "./logger";
 import { Eintrag } from "./model/EintragModel";
 import { Pfleger } from "./model/PflegerModel";
@@ -26,6 +26,11 @@ export async function prefillDB(): Promise<{
     name: "Micha",
     password: "123_abc_ABC",
     admin: true,
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
+
   });
   logger.info(
     `Prefill DB with test data, pfleger: ${behrens.name}, password 123_abc_ABC`

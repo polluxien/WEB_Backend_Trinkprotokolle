@@ -108,7 +108,7 @@ export async function createProtokoll(
 }
 
 /**
- * Ändert die Daten einer Protokoll.
+ * Ändert die Daten des Protokolls.
  */
 export async function updateProtokoll(
   protokollResource: ProtokollResource

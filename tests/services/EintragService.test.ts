@@ -2,6 +2,8 @@ import { HydratedDocument } from "mongoose";
 import { IProtokoll, Protokoll } from "../../src/model/ProtokollModel";
 import { IPfleger, Pfleger } from "../../src/model/PflegerModel";
 import { Eintrag, IEintrag } from "../../src/model/EintragModel";
+import { Gender } from "../../src/model/PflegerModel";
+
 import {
   createEintrag,
   deleteEintrag,
@@ -26,10 +28,18 @@ beforeEach(async () => {
     name: "Harry",
     password: "password",
     admin: false,
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   });
   pflegerLilli = await Pfleger.create({
     name: "Lilli",
     password: "12345",
+    gender: Gender.Weiblich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   });
   await pflegerHarry.save();
   await pflegerLilli.save();

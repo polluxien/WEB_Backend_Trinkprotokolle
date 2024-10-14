@@ -1,5 +1,6 @@
 import { verifyJWT, verifyPasswordAndCreateJWT } from "../../src/services/JWTService";
 import { createPfleger } from "../../src/services/PflegerService";
+import { Gender } from "../../src/model/PflegerModel"
 
 describe("JWT Service", () => {
   beforeAll(async () => {
@@ -8,6 +9,10 @@ describe("JWT Service", () => {
       name: "John",
       password: "1234abcdABCD..;,.",
       admin: false,
+      gender: Gender.Männlich,
+      adress: "Behrensenstraße 14, 14059 Berlin",
+      position: "Teamleader",
+      birth: new Date("1975-12-11"),
     });
   });
 

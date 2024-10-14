@@ -14,6 +14,10 @@ export async function getAllePfleger(): Promise<PflegerResource[]> {
       name: pfleger.name,
       admin: !!pfleger.admin,
       id: pfleger.id,
+      gender: pfleger.gender,
+      birth: pfleger.birth,
+      adress: pfleger.adress,
+      position: pfleger.position
     };
     pflegerResources.push(pflegerPush);
   }
@@ -23,9 +27,13 @@ export async function getAllePfleger(): Promise<PflegerResource[]> {
 export async function getPfleger(pflegerid: string): Promise<PflegerResource> {
   const pfleger = await Pfleger.findById(pflegerid).exec();
   const pflegerResources: PflegerResource = {
-      name: pfleger!.name,
-      admin: !!pfleger!.admin,
-      id: pfleger!.id,
+    name: pfleger!.name,
+    admin: !!pfleger!.admin,
+    id: pfleger!.id,
+    gender: pfleger!.gender,
+    birth: pfleger!.birth,
+    adress: pfleger!.adress,
+    position: pfleger!.position
     };
     return pflegerResources;
 }
@@ -41,9 +49,13 @@ export async function createPfleger(
   
   const pfleger = await Pfleger.create(pflegerResource);
   const pflegerBack: PflegerResource = {
-    name: pfleger.name,
-    admin: !!pfleger.admin,
-    id: pfleger.id!,
+    name: pfleger!.name,
+    admin: !!pfleger!.admin,
+    id: pfleger!.id,
+    gender: pfleger!.gender,
+    birth: pfleger!.birth,
+    adress: pfleger!.adress,
+    position: pfleger!.position
   };
   return pflegerBack;
 }
@@ -72,6 +84,10 @@ export async function updatePfleger(
     name: savedPfleger.name,
     admin: !!savedPfleger.admin,
     id: savedPfleger.id,
+    gender: savedPfleger.gender,
+    birth: savedPfleger.birth,
+    adress: savedPfleger.adress,
+    position: savedPfleger.position
   };
 }
 

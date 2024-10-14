@@ -1,11 +1,17 @@
 import { Pfleger } from "../src/model/PflegerModel";
 import bcrypt from "bcryptjs";
+import { Gender } from "../src/model/PflegerModel";
+
 
 test("save mit hash", async () => {
   let password: string = "123456789";
   let pflegerMartin = await Pfleger.create({
     name: "LeMartin",
     password: password,
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   });
   const leM = await pflegerMartin.save();
   let hashedpassword = leM.password;
@@ -21,6 +27,10 @@ test("ändern des passworts automatisch mit hash", async () => {
   let pflegerMartin = await Pfleger.create({
     name: "LeMartin",
     password: password,
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   });
   const leM = await pflegerMartin.save();
 
@@ -40,6 +50,10 @@ test("Passwortkontrolle mit Schema-Methode", async () => {
   const pflegerMartin = await Pfleger.create({
     name: "LeMartin",
     password: password,
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   });
   const leM = await pflegerMartin.save();
   const t1 = await leM.isCorrectPassword(password);
@@ -55,6 +69,10 @@ test("sollte einen Fehler werfen, wenn das Passwort noch nicht gehasht wurde", a
   const pfleger = new Pfleger({
     name: "LeMartin",
     password: password,
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   });
   //wichtiggg
   pfleger.isNew = false;

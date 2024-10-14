@@ -31,6 +31,10 @@ pflegerRouter.post(
   body("password").isStrongPassword().isLength({ min: 3, max: 100 }),
   body("name").isString().isLength({ min: 3, max: 100 }),
   body("admin").optional().isBoolean(),
+  body("gender").optional().isString(),
+  body("adress").isString().isLength({ min: 3, max: 100 }),
+  body("position").isString().isLength({ min: 3, max: 100 }),
+  body("birth").isString().isLength({ min: 3, max: 100 }),
   requiresAuthentication,
   async (req, res, next) => {
     //Typabfrage
@@ -56,6 +60,10 @@ pflegerRouter.put(
   param("id").isMongoId().isLength({ min: 3, max: 100 }),
   body("name").isString().isLength({ min: 3, max: 100 }),
   body("admin").optional().isBoolean(),
+  body("gender").optional().isString(),
+  body("adress").isString().isLength({ min: 3, max: 100 }),
+  body("position").isString().isLength({ min: 3, max: 100 }),
+  body("birth").isString().isLength({ min: 3, max: 100 }),
   requiresAuthentication,
   async (req, res, next) => {
     const errors = validationResult(req).array();

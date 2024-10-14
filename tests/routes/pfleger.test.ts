@@ -4,6 +4,8 @@ import { createPfleger } from "../../src/services/PflegerService";
 import { createProtokoll } from "../../src/services/ProtokollService";
 import { parseCookies } from "restmatcher";
 import { performAuthentication } from "../supertestWithAuth";
+import { Gender } from "../../src/model/PflegerModel";
+
 
 let idBehrens: string;
 let idProtokoll: string;
@@ -21,6 +23,10 @@ beforeEach(async () => {
     name: "Hofrat Behrens",
     password: "Testpass?23",
     admin: true,
+    gender: Gender.Männlich,
+    adress: "Behrensenstraße 14, 14059 Berlin",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   });
   idBehrens = behrens.id!;
   // Protokoll erstellen

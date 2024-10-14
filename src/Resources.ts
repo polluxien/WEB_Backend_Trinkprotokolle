@@ -1,8 +1,19 @@
+export enum Gender {
+    Männlich = "Männlich",
+    Weiblich = "Weiblich",
+    Divers = "Divers",
+    KeineAngabe = "Keine Angabe"
+  }
+
 export type PflegerResource = {
     id?: string
     name: string
     admin: boolean
     password?: string
+    gender: Gender;
+    birth: Date;
+    adress: string;
+    position: string;
 }
 
 export type ProtokollResource = {

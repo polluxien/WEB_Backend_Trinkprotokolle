@@ -1,6 +1,8 @@
 import { HydratedDocument } from "mongoose";
 import { IProtokoll, Protokoll } from "../../src/model/ProtokollModel";
 import { IPfleger, Pfleger } from "../../src/model/PflegerModel";
+import { Gender } from "../../src/model/PflegerModel";
+
 
 let pflegerHarry: HydratedDocument<IPfleger>;
 
@@ -9,6 +11,10 @@ beforeEach(async () => {
     name: "Harry",
     password: "password",
     admin: true,
+    gender: Gender.Männlich,
+    adress: "London",
+    position: "Teamleader",
+    birth: new Date("1975-12-11"),
   });
   await pflegerHarry.save();
 });
