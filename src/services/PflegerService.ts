@@ -18,7 +18,7 @@ export async function getAllePfleger(): Promise<PflegerResource[]> {
       gender: pfleger.gender,
       birth: dateToString(pfleger.birth),
       adress: pfleger.adress,
-      position: pfleger.position
+      position: pfleger.position,
     };
     pflegerResources.push(pflegerPush);
   }
@@ -34,9 +34,9 @@ export async function getPfleger(pflegerid: string): Promise<PflegerResource> {
     gender: pfleger!.gender,
     birth: dateToString(pfleger!.birth),
     adress: pfleger!.adress,
-    position: pfleger!.position
-    };
-    return pflegerResources;
+    position: pfleger!.position,
+  };
+  return pflegerResources;
 }
 
 /**
@@ -47,7 +47,7 @@ export async function createPfleger(
 ): Promise<PflegerResource> {
   const existingPfleger = await Pfleger.findOne({ name: pflegerResource.name });
   if (existingPfleger) throw new Error("Name Exestiert bereits in Database");
-  
+
   const pfleger = await Pfleger.create(pflegerResource);
   const pflegerBack: PflegerResource = {
     name: pfleger!.name,
@@ -56,7 +56,7 @@ export async function createPfleger(
     gender: pfleger!.gender,
     birth: dateToString(pfleger!.birth),
     adress: pfleger!.adress,
-    position: pfleger!.position
+    position: pfleger!.position,
   };
   return pflegerBack;
 }
@@ -70,6 +70,7 @@ export async function updatePfleger(
   let updatingpfleger = await Pfleger.findById(pflegerResource.id).exec();
   if (!updatingpfleger) throw new Error("Pfleger wurde nicht gefunden");
 
+  // Felder prüfen und aktualisieren
   if (pflegerResource.name !== undefined) {
     updatingpfleger.name = pflegerResource.name;
   }
@@ -79,6 +80,19 @@ export async function updatePfleger(
   if (pflegerResource.password !== undefined) {
     updatingpfleger.password = pflegerResource.password;
   }
+  if (pflegerResource.gender !== undefined) {
+    updatingpfleger.gender = pflegerResource.gender;
+  }
+  if (pflegerResource.birth !== undefined) {
+    updatingpfleger.birth = new Date(pflegerResource.birth); // Stelle sicher, dass birth ein Date-Objekt ist
+  }
+  if (pflegerResource.adress !== undefined) {
+    updatingpfleger.adress = pflegerResource.adress;
+  }
+  if (pflegerResource.position !== undefined) {
+    updatingpfleger.position = pflegerResource.position;
+  }
+  
   const savedPfleger = await updatingpfleger.save();
 
   return {
@@ -88,7 +102,7 @@ export async function updatePfleger(
     gender: savedPfleger.gender,
     birth: dateToString(savedPfleger.birth),
     adress: savedPfleger.adress,
-    position: savedPfleger.position
+    position: savedPfleger.position,
   };
 }
 

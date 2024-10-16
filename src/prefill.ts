@@ -29,7 +29,7 @@ export async function prefillDB(): Promise<{
     gender: Gender.Männlich,
     adress: "Behrensenstraße 14, 14059 Berlin",
     position: "Teamleader",
-    birth: "11.12.1975",
+    birth: "4.10.1975",
 
   });
   logger.info(

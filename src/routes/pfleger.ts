@@ -57,10 +57,10 @@ pflegerRouter.post(
 // update
 pflegerRouter.put(
   "/:id",
-  param("id").isMongoId().isLength({ min: 3, max: 100 }),
+  param("id").isMongoId(),
   body("name").isString().isLength({ min: 3, max: 100 }),
   body("admin").optional().isBoolean(),
-  body("gender").optional().isString(),
+  body("gender").optional().isString().isLength({ min: 3, max: 20 }),
   body("adress").isString().isLength({ min: 3, max: 100 }),
   body("position").isString().isLength({ min: 3, max: 100 }),
   body("birth").isString().isLength({ min: 3, max: 100 }),
@@ -84,6 +84,7 @@ pflegerRouter.put(
           value: req.body.id,
         }
       );
+
     if (errors.length > 0) {
       return res.status(400).json({ errors: errors });
     }
