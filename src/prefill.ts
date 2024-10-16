@@ -29,7 +29,7 @@ export async function prefillDB(): Promise<{
     gender: Gender.Männlich,
     adress: "Behrensenstraße 14, 14059 Berlin",
     position: "Teamleader",
-    birth: new Date("1975-12-11"),
+    birth: "11.12.1975",
 
   });
   logger.info(
@@ -43,7 +43,7 @@ export async function prefillDB(): Promise<{
     [3, 5, 7],
   ];
   const patienten = ["Sabrina", "Clawdia"];
-  const datumPostfix = [".10.1907", ".11.1907"];
+  const datumPostfix = [".10.2023", ".11.2023"];
   const publicValue = [true, false];
   const getraenke = ["Kaffee", "Tee", "Sekt", "Limo"];
   const mengen = [150, 180, 200, 300];

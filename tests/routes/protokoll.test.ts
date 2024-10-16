@@ -21,7 +21,7 @@ beforeEach(async () => {
     gender: Gender.Männlich,
     adress: "Behrensenstraße 14, 14059 Berlin",
     position: "Teamleader",
-    birth: new Date("1975-12-11"),
+    birth: "1975-12-11",
   });
   idBehrens = behrens.id!;
   const protokoll = await createProtokoll({

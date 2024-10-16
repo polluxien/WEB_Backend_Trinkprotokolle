@@ -2,6 +2,7 @@ import { PflegerResource } from "../Resources";
 import { Eintrag } from "../model/EintragModel";
 import { Pfleger } from "../model/PflegerModel";
 import { Protokoll } from "../model/ProtokollModel";
+import { dateToString } from "./ServiceHelper";
 
 /**
  * Die Passwörter dürfen nicht zurückgegeben werden.
@@ -15,7 +16,7 @@ export async function getAllePfleger(): Promise<PflegerResource[]> {
       admin: !!pfleger.admin,
       id: pfleger.id,
       gender: pfleger.gender,
-      birth: pfleger.birth,
+      birth: dateToString(pfleger.birth),
       adress: pfleger.adress,
       position: pfleger.position
     };
@@ -31,7 +32,7 @@ export async function getPfleger(pflegerid: string): Promise<PflegerResource> {
     admin: !!pfleger!.admin,
     id: pfleger!.id,
     gender: pfleger!.gender,
-    birth: pfleger!.birth,
+    birth: dateToString(pfleger!.birth),
     adress: pfleger!.adress,
     position: pfleger!.position
     };
@@ -53,7 +54,7 @@ export async function createPfleger(
     admin: !!pfleger!.admin,
     id: pfleger!.id,
     gender: pfleger!.gender,
-    birth: pfleger!.birth,
+    birth: dateToString(pfleger!.birth),
     adress: pfleger!.adress,
     position: pfleger!.position
   };
@@ -85,7 +86,7 @@ export async function updatePfleger(
     admin: !!savedPfleger.admin,
     id: savedPfleger.id,
     gender: savedPfleger.gender,
-    birth: savedPfleger.birth,
+    birth: dateToString(savedPfleger.birth),
     adress: savedPfleger.adress,
     position: savedPfleger.position
   };

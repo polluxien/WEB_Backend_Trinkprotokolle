@@ -23,7 +23,7 @@ beforeEach(async () => {
     gender: Gender.Weiblich,
     adress: "Fuchsbau 14, 10101 Landon",
     position: "Teamleader",
-    birth: new Date("1975-12-11"),
+    birth: "1975-12-11",
   });
   fredsProtokoll = await createProtokoll({
     patient: "Fred Weasly",

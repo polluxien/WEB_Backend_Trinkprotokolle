@@ -90,7 +90,7 @@ test("createPfleger test", async () => {
     gender: Gender.Männlich,
     adress: "Behrensenstraße 14, 14059 Berlin",
     position: "Teamleader",
-    birth: new Date("1975-12-11"),
+    birth: "1975-12-11",
   });
   //t1 Richtige initalisiert
   expect(pfleger.name).toBe("derNeue");
@@ -116,7 +116,7 @@ test("updatePfleger test", async () => {
     gender: Gender.Männlich,
     adress: "Behrensenstraße 14, 14059 Berlin",
     position: "Teamleader",
-    birth: new Date("1975-12-11"),
+    birth: "1975-12-11",
   };
   const pflegerBack = await updatePfleger(pflegerUpp);
 
@@ -165,7 +165,7 @@ test("updatePfleger test - only name", async () => {
     gender: Gender.Männlich,
     adress: "Behrensenstraße 14, 14059 Berlin",
     position: "Teamleader",
-    birth: new Date("1975-12-11"),
+    birth: "1975-12-11",
   };
   const pflegerBack = await updatePfleger(pflegerUpp);
 
@@ -190,7 +190,7 @@ test("updatePfleger test - name and admin", async () => {
     gender: Gender.Männlich,
     adress: "Behrensenstraße 14, 14059 Berlin",
     position: "Teamleader",
-    birth: new Date("1975-12-11"),
+    birth: "1975-12-11",
   };
   const pflegerBack = await updatePfleger(pflegerUpp);
 
@@ -212,6 +212,6 @@ test("Pflegername existiert bereits", async () => {
     gender: Gender.Männlich,
     adress: "Behrensenstraße 14, 14059 Berlin",
     position: "Teamleader",
-    birth: new Date("1975-12-11"),
+    birth: "1975-12-11",
   })).rejects.toThrow();
 });

@@ -11,7 +11,7 @@ export type PflegerResource = {
     admin: boolean
     password?: string
     gender: Gender;
-    birth: Date;
+    birth: string;
     adress: string;
     position: string;
 }

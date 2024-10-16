@@ -20,7 +20,7 @@ beforeEach(async () => {
     gender: Gender.Weiblich,
     adress: "Fuchsbau 7, 1010 London",
     position: "Teamleader",
-    birth: new Date("1975-12-11"),
+    birth: "1975-12-11",
   });
 
   await performAuthentication("Poppy Pomfrey", "12345bcdABCD..;,.");
@@ -67,7 +67,7 @@ test("/api/pfleger PUT, verschiedene ID (params und body)", async () => {
     gender: Gender.Männlich,
     adress: "Behrensenstraße 14, 14059 Berlin",
     position: "Teamleader",
-    birth: new Date("1975-12-11"),
+    birth: "1975-12-11",
   };
   const createdPfleger = await createPfleger(invalidPfleger);
 
