@@ -14,6 +14,8 @@ export type PflegerResource = {
     birth: string;
     adress: string;
     position: string;
+    updatedAt?: string
+    gesamtproto?: number
 }
 
 export type ProtokollResource = {

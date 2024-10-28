@@ -19,8 +19,10 @@ export async function getAlleProtokolle(
     protoPfleger = await Protokoll.find({ ersteller: pflegerId }).exec();
   }
   //hier implentieren das Admin einsicht auf alle protokolle hat
+  /*
   if (!pflegerId || !pfleger!.admin) {
   }
+  */
 
   const publicListe = await Protokoll.find({ public: true }).exec();
 

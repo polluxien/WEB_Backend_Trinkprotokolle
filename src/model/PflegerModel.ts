@@ -20,6 +20,7 @@ export interface IPfleger {
   birth: Date;
   adress: string;
   position: string;
+  updatedAt?: string
 }
 
 type pflegerModell = Model<IPfleger, {}, IPflegerMethods>;
@@ -36,6 +37,9 @@ const pflegerSchema = new Schema<IPfleger, pflegerModell>({
   birth: { type: Date, required: true },
   adress: { type: String },
   position: { type: String },
+  updatedAt: {type: Date}
+},{
+  timestamps: true
 });
 
 pflegerSchema.pre("save", async function () {

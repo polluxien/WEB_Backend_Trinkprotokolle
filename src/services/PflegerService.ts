@@ -2,7 +2,7 @@ import { PflegerResource } from "../Resources";
 import { Eintrag } from "../model/EintragModel";
 import { Pfleger } from "../model/PflegerModel";
 import { Protokoll } from "../model/ProtokollModel";
-import { dateToString } from "./ServiceHelper";
+import { dateToString, stringToDate } from "./ServiceHelper";
 
 /**
  * Die Passwörter dürfen nicht zurückgegeben werden.
@@ -11,6 +11,8 @@ export async function getAllePfleger(): Promise<PflegerResource[]> {
   const pflegerListe = await Pfleger.find({});
   const pflegerResources: PflegerResource[] = [];
   for (let pfleger of pflegerListe) {
+    const protMenge = await gesammtProtokolle(pfleger.id);
+    const lastUpdated = await zuletztGeupdated(pfleger.id);
     const pflegerPush = {
       name: pfleger.name,
       admin: !!pfleger.admin,
@@ -19,6 +21,8 @@ export async function getAllePfleger(): Promise<PflegerResource[]> {
       birth: dateToString(pfleger.birth),
       adress: pfleger.adress,
       position: pfleger.position,
+      protoMenge: protMenge,
+      updatedAt: dateToString(lastUpdated),
     };
     pflegerResources.push(pflegerPush);
   }
@@ -27,6 +31,11 @@ export async function getAllePfleger(): Promise<PflegerResource[]> {
 
 export async function getPfleger(pflegerid: string): Promise<PflegerResource> {
   const pfleger = await Pfleger.findById(pflegerid).exec();
+  if (!pfleger) {
+    throw new Error("Pfleger wurde nicht gefunden");
+  }
+  const protMenge = await gesammtProtokolle(pflegerid);
+  const lastUpdated = await zuletztGeupdated(pflegerid);
   const pflegerResources: PflegerResource = {
     name: pfleger!.name,
     admin: !!pfleger!.admin,
@@ -35,6 +44,8 @@ export async function getPfleger(pflegerid: string): Promise<PflegerResource> {
     birth: dateToString(pfleger!.birth),
     adress: pfleger!.adress,
     position: pfleger!.position,
+    gesamtproto: protMenge,
+    updatedAt: dateToString(lastUpdated),
   };
   return pflegerResources;
 }
@@ -57,6 +68,7 @@ export async function createPfleger(
     birth: dateToString(pfleger!.birth),
     adress: pfleger!.adress,
     position: pfleger!.position,
+    gesamtproto: 0,
   };
   return pflegerBack;
 }
@@ -92,8 +104,10 @@ export async function updatePfleger(
   if (pflegerResource.position !== undefined) {
     updatingpfleger.position = pflegerResource.position;
   }
-  
+
   const savedPfleger = await updatingpfleger.save();
+  const protMenge = await gesammtProtokolle(savedPfleger.id);
+  const lastUpdated = await zuletztGeupdated(savedPfleger.id);
 
   return {
     name: savedPfleger.name,
@@ -103,6 +117,8 @@ export async function updatePfleger(
     birth: dateToString(savedPfleger.birth),
     adress: savedPfleger.adress,
     position: savedPfleger.position,
+    updatedAt: dateToString(lastUpdated),
+    gesamtproto: protMenge
   };
 }
 
@@ -126,4 +142,22 @@ export async function deletePfleger(id: string): Promise<void> {
   if (deleteted) {
     throw new Error("Das Pflegerelement existiert immer noch");
   }
+}
+
+async function gesammtProtokolle(pflegerID: string): Promise<number> {
+  const protoListe = await Protokoll.find({ ersteller: pflegerID });
+  return protoListe.length;
+}
+
+async function zuletztGeupdated(pflegerID: string): Promise<Date> {
+  const protoListe = await Protokoll.find({ ersteller: pflegerID });
+
+  if (protoListe.length === 0) {
+    throw new Error("Keine Protokolle gefunden");
+  }
+
+  const lastUpdated = protoListe
+    .map((protokoll) => new Date(protokoll.datum))
+    .reduce((latest, current) => (current > latest ? current : latest));
+  return lastUpdated;
 }

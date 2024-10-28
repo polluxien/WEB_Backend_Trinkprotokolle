@@ -28,7 +28,7 @@ export async function prefillDB(): Promise<{
     logger.info(
       `Prefill DB with test data, ${
         admin ? "ADMIN" : ""
-      } pfleger: ${name}, password 123_abc_ABC`
+      } pfleger: ${name}, password: 123_abc_ABC`
     );
   }
 
@@ -45,7 +45,7 @@ export async function prefillDB(): Promise<{
   const pflegerLisa = await createPfleger({
     name: "Lisa",
     password: "123_abc_ABC",
-    admin: false,
+    admin: true,
     gender: Gender.Weiblich,
     adress: "Prinzenalle 33, 13359 Berlin",
     position: "Ambulante Pflegerin",
