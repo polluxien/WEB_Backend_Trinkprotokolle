@@ -22,7 +22,7 @@ export async function getAllePfleger(): Promise<PflegerResource[]> {
       adress: pfleger.adress,
       position: pfleger.position,
       protoMenge: protMenge,
-      updatedAt: dateToString(lastUpdated),
+      updatedAt: lastUpdated ? dateToString(lastUpdated): lastUpdated,
     };
     pflegerResources.push(pflegerPush);
   }
@@ -45,7 +45,7 @@ export async function getPfleger(pflegerid: string): Promise<PflegerResource> {
     adress: pfleger!.adress,
     position: pfleger!.position,
     gesamtproto: protMenge,
-    updatedAt: dateToString(lastUpdated),
+    updatedAt: lastUpdated ? dateToString(lastUpdated) : lastUpdated,
   };
   return pflegerResources;
 }
@@ -96,7 +96,7 @@ export async function updatePfleger(
     updatingpfleger.gender = pflegerResource.gender;
   }
   if (pflegerResource.birth !== undefined) {
-    updatingpfleger.birth = new Date(pflegerResource.birth); // Stelle sicher, dass birth ein Date-Objekt ist
+    updatingpfleger.birth = stringToDate(pflegerResource.birth); // Stelle sicher, dass birth ein Date-Objekt ist
   }
   if (pflegerResource.adress !== undefined) {
     updatingpfleger.adress = pflegerResource.adress;
@@ -117,7 +117,7 @@ export async function updatePfleger(
     birth: dateToString(savedPfleger.birth),
     adress: savedPfleger.adress,
     position: savedPfleger.position,
-    updatedAt: dateToString(lastUpdated),
+    updatedAt: lastUpdated ? dateToString(lastUpdated) : lastUpdated,
     gesamtproto: protMenge
   };
 }
@@ -149,11 +149,11 @@ async function gesammtProtokolle(pflegerID: string): Promise<number> {
   return protoListe.length;
 }
 
-async function zuletztGeupdated(pflegerID: string): Promise<Date> {
+async function zuletztGeupdated(pflegerID: string): Promise<Date | undefined> {
   const protoListe = await Protokoll.find({ ersteller: pflegerID });
 
   if (protoListe.length === 0) {
-    throw new Error("Keine Protokolle gefunden");
+    return undefined;
   }
 
   const lastUpdated = protoListe

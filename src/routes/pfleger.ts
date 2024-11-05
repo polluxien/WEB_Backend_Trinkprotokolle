@@ -12,6 +12,7 @@ import {
   optionalAuthentication,
   requiresAuthentication,
 } from "./authentication";
+import { PflegerResource } from "../Resources";
 
 export const pflegerRouter = express.Router();
 
@@ -89,7 +90,7 @@ pflegerRouter.put(
       return res.status(400).json({ errors: errors });
     }
     const id = req.params!.id;
-    const pflegerResource = req.body;
+    const pflegerResource: PflegerResource = req.body;
     pflegerResource.id = id;
     try {
       const pfleger = await getPfleger(id);
